@@ -4,7 +4,7 @@ import { AppShell } from '@/components/layout/app-shell';
 import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
-  title: 'StudyBuddy AI',
+  title: 'StudyMate AI',
   description:
     'Your personal AI-powered assistant for learning, planning, and success.',
 };
