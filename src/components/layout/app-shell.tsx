@@ -13,6 +13,7 @@ import {
   Library,
   User,
   Clock,
+  Bell,
 } from 'lucide-react';
 import {
   SidebarProvider,
@@ -27,6 +28,8 @@ import {
 } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { useToast } from '@/hooks/use-toast';
+import { NotificationScheduler } from '../notifications/notification-scheduler';
 
 const menuItems = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -40,6 +43,21 @@ const menuItems = [
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const { toast } = useToast();
+
+  React.useEffect(() => {
+    if ('Notification' in window && Notification.permission === 'default') {
+      Notification.requestPermission().then(permission => {
+        if (permission === 'granted') {
+          toast({
+            title: 'Notifications Enabled',
+            description: 'You will now receive reminders for your study sessions.',
+          });
+        }
+      });
+    }
+  }, [toast]);
+
 
   return (
     <SidebarProvider>
@@ -90,8 +108,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               {menuItems.find((item) => item.href === pathname)?.label || 'StudyBuddy AI'}
             </h2>
           </div>
+          <div>
+            <Button variant="ghost" size="icon">
+              <Bell className="h-5 w-5" />
+              <span className="sr-only">Notifications</span>
+            </Button>
+          </div>
         </header>
         <main className="flex-1 overflow-y-auto p-4 md:p-6">
+          <NotificationScheduler />
           {children}
         </main>
       </SidebarInset>

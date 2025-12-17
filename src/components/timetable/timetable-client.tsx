@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -81,6 +82,10 @@ export function TimetableClient() {
 
     if (result.success && result.data) {
       setTimetable(result.data.timetable);
+       if (typeof window !== 'undefined') {
+        localStorage.setItem('timetable', result.data.timetable);
+        window.dispatchEvent(new Event('timetable-updated'));
+      }
     } else {
       toast({
         variant: 'destructive',
