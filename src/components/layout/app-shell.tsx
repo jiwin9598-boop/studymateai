@@ -11,6 +11,7 @@ import {
   GraduationCap,
   LayoutDashboard,
   Library,
+  User,
 } from 'lucide-react';
 import {
   SidebarProvider,
@@ -32,6 +33,7 @@ const menuItems = [
   { href: '/quiz', label: 'Quiz Generator', icon: FileQuestion },
   { href: '/planner', label: 'Study Planner', icon: CalendarCheck },
   { href: '/library', label: 'Resource Library', icon: Library },
+  { href: '/profile', label: 'Profile', icon: User },
 ];
 
 export function AppShell({ children }: { children: React.ReactNode }) {
