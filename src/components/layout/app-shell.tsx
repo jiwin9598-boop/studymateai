@@ -12,6 +12,7 @@ import {
   LayoutDashboard,
   Library,
   User,
+  Clock,
 } from 'lucide-react';
 import {
   SidebarProvider,
@@ -32,6 +33,7 @@ const menuItems = [
   { href: '/tutor', label: 'AI Tutor', icon: BrainCircuit },
   { href: '/quiz', label: 'Quiz Generator', icon: FileQuestion },
   { href: '/planner', label: 'Study Planner', icon: CalendarCheck },
+  { href: '/timetable', label: 'Timetable', icon: Clock },
   { href: '/library', label: 'Resource Library', icon: Library },
   { href: '/profile', label: 'Profile', icon: User },
 ];

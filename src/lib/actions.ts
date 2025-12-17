@@ -13,6 +13,10 @@ import {
   getPersonalizedTutoring,
   type GetPersonalizedTutoringInput,
 } from '@/ai/flows/get-personalized-tutoring';
+import {
+    generateTimetable,
+    type GenerateTimetableInput,
+} from '@/ai/flows/generate-timetable';
 
 export async function createStudyPlanAction(
   input: GeneratePersonalizedStudyPlanInput
@@ -46,4 +50,14 @@ export async function getTutorResponseAction(
     console.error(error);
     return { success: false, error: 'Failed to get response from tutor.' };
   }
+}
+
+export async function createTimetableAction(input: GenerateTimetableInput) {
+    try {
+      const result = await generateTimetable(input);
+      return { success: true, data: result };
+    } catch (error) {
+      console.error(error);
+      return { success: false, error: 'Failed to generate timetable.' };
+    }
 }
