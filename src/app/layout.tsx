@@ -4,7 +4,7 @@ import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
-  title: 'StudyMate AI',
+  title: 'AILAC',
   description:
     'Your personal AI-powered assistant for learning, planning, and success.',
 };

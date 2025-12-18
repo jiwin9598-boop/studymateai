@@ -9,7 +9,7 @@ export default function Loading() {
           <GraduationCap className="h-20 w-20 text-primary" />
           <div className="absolute inset-0 rounded-full border-4 border-primary/50 animate-ping"></div>
         </div>
-        <p className="text-lg text-muted-foreground">Loading StudyMate AI...</p>
+        <p className="text-lg text-muted-foreground">Loading AILAC...</p>
       </div>
     </div>
   );

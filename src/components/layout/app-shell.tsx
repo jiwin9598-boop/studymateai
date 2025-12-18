@@ -69,7 +69,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 <GraduationCap className="h-7 w-7" />
               </Link>
             </Button>
-            <h1 className="text-xl font-headline font-bold">StudyMate AI</h1>
+            <h1 className="text-xl font-headline font-bold">AILAC</h1>
           </div>
         </SidebarHeader>
         <SidebarContent>
@@ -111,7 +111,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </div>
           <div className="flex-1 text-center md:text-left">
             <h2 className="text-lg font-semibold">
-              {menuItems.find((item) => item.href === pathname)?.label || 'StudyMate AI'}
+              {menuItems.find((item) => item.href === pathname)?.label || 'AILAC'}
             </h2>
           </div>
           <div>

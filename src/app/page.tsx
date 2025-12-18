@@ -39,8 +39,8 @@ export default function Home() {
     <div className="flex flex-col min-h-screen">
       <header className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
         <div className="flex items-center gap-2">
-          <Image src="/logo.svg" alt="StudyMate AI Logo" width={32} height={32} className="text-primary" />
-          <h1 className="text-2xl font-headline font-bold">StudyMate AI</h1>
+          <Image src="/logo.svg" alt="AILAC Logo" width={32} height={32} className="text-primary" />
+          <h1 className="text-2xl font-headline font-bold">AILAC</h1>
         </div>
         <Button asChild>
           <Link href="/dashboard">Get Started</Link>
@@ -54,7 +54,7 @@ export default function Home() {
               Your Personal AI Study Partner
             </h2>
             <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
-              Struggling to keep up? StudyMate AI creates personalized study plans, generates adaptive quizzes, and provides instant tutoring to help you achieve academic success.
+              Struggling to keep up? AILAC creates personalized study plans, generates adaptive quizzes, and provides instant tutoring to help you achieve academic success.
             </p>
             <Button size="lg" asChild>
               <Link href="/dashboard">Start Learning for Free</Link>
@@ -99,7 +99,7 @@ export default function Home() {
 
       <footer className="py-6 border-t">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} StudyMate AI. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} AILAC. All rights reserved.</p>
         </div>
       </footer>
     </div>
