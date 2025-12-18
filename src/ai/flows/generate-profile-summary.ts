@@ -1,3 +1,4 @@
+
 'use server';
 
 /**
@@ -11,7 +12,7 @@
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
-export const GenerateProfileSummaryInputSchema = z.object({
+const GenerateProfileSummaryInputSchema = z.object({
   subjects: z.array(
     z.object({
       name: z.string(),
@@ -21,7 +22,7 @@ export const GenerateProfileSummaryInputSchema = z.object({
 });
 export type GenerateProfileSummaryInput = z.infer<typeof GenerateProfileSummaryInputSchema>;
 
-export const GenerateProfileSummaryOutputSchema = z.object({
+const GenerateProfileSummaryOutputSchema = z.object({
   summary: z.string().describe('A friendly and encouraging summary of the student\'s performance, highlighting areas for improvement.'),
 });
 export type GenerateProfileSummaryOutput = z.infer<typeof GenerateProfileSummaryOutputSchema>;
