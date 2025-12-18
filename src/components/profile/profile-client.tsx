@@ -1,11 +1,11 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { PlusCircle, Trash2, Loader2, Save } from 'lucide-react';
+import { PlusCircle, Trash2, Loader2, Save, Sparkles } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -20,6 +20,8 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { Separator } from '../ui/separator';
+import { createProfileSummaryAction } from '@/lib/actions';
+import { Skeleton } from '../ui/skeleton';
 
 const profileFormSchema = z.object({
   subjects: z
@@ -49,6 +51,8 @@ const initialSubjects = [
 
 export function ProfileClient() {
   const [isLoading, setIsLoading] = useState(false);
+  const [isSummaryLoading, setIsSummaryLoading] = useState(false);
+  const [summary, setSummary] = useState<string | null>(null);
   const { toast } = useToast();
 
   const form = useForm<ProfileFormValues>({
@@ -63,6 +67,27 @@ export function ProfileClient() {
     name: 'subjects',
   });
 
+  const generateSummary = async (values: ProfileFormValues) => {
+    setIsSummaryLoading(true);
+    setSummary(null);
+    const result = await createProfileSummaryAction(values);
+    if (result.success && result.data) {
+      setSummary(result.data.summary);
+    } else {
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Could not generate AI summary.',
+      });
+    }
+    setIsSummaryLoading(false);
+  }
+
+  // Generate summary on initial load
+  useEffect(() => {
+    generateSummary(form.getValues());
+  }, []);
+
   async function onSubmit(values: ProfileFormValues) {
     setIsLoading(true);
     
@@ -76,84 +101,117 @@ export function ProfileClient() {
     });
     
     setIsLoading(false);
+    generateSummary(values);
   }
 
   return (
-    <Card>
-        <CardHeader>
-          <CardTitle>Your Subjects</CardTitle>
-          <CardDescription>
-            Add your subjects and current marks (out of 100) to see them on your dashboard.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              <div className="space-y-4">
-                {fields.map((field, index) => (
-                  <div key={field.id} className="grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
-                    <FormField
-                      control={form.control}
-                      name={`subjects.${index}.name`}
-                      render={({ field }) => (
-                        <FormItem className="md:col-span-2">
-                          <FormLabel>Subject</FormLabel>
-                          <FormControl>
-                            <Input placeholder="e.g., Physics" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name={`subjects.${index}.mark`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Mark (%)</FormLabel>
-                          <div className="flex items-center gap-2">
-                            <FormControl>
-                                <Input type="number" placeholder="e.g., 88" {...field} />
-                            </FormControl>
-                            <Button
-                                type="button"
-                                variant="ghost"
-                                size="icon"
-                                onClick={() => remove(index)}
-                                disabled={fields.length <= 1}
-                            >
-                                <Trash2 className="h-4 w-4 text-destructive" />
-                            </Button>
-                          </div>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="lg:col-span-2">
+        <Card>
+            <CardHeader>
+              <CardTitle>Your Subjects</CardTitle>
+              <CardDescription>
+                Add your subjects and current marks (out of 100) to see them on your dashboard.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                  <div className="space-y-4">
+                    {fields.map((field, index) => (
+                      <div key={field.id} className="grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
+                        <FormField
+                          control={form.control}
+                          name={`subjects.${index}.name`}
+                          render={({ field }) => (
+                            <FormItem className="md:col-span-2">
+                              <FormLabel>Subject</FormLabel>
+                              <FormControl>
+                                <Input placeholder="e.g., Physics" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name={`subjects.${index}.mark`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Mark (%)</FormLabel>
+                              <div className="flex items-center gap-2">
+                                <FormControl>
+                                    <Input type="number" placeholder="e.g., 88" {...field} />
+                                </FormControl>
+                                <Button
+                                    type="button"
+                                    variant="ghost"
+                                    size="icon"
+                                    onClick={() => remove(index)}
+                                    disabled={fields.length <= 1}
+                                >
+                                    <Trash2 className="h-4 w-4 text-destructive" />
+                                </Button>
+                              </div>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-              <Separator />
-              <div className="flex justify-between">
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => append({ name: '', mark: 0 })}
-                >
-                  <PlusCircle className="mr-2 h-4 w-4" />
-                  Add Subject
-                </Button>
-                <Button type="submit" disabled={isLoading}>
-                  {isLoading ? (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  ) : <Save className="mr-2 h-4 w-4" />}
-                  Save Changes
-                </Button>
-              </div>
-              <FormMessage>{form.formState.errors.subjects?.message}</FormMessage>
-            </form>
-          </Form>
-        </CardContent>
-      </Card>
+                  <Separator />
+                  <div className="flex justify-between items-center">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => append({ name: '', mark: 0 })}
+                    >
+                      <PlusCircle className="mr-2 h-4 w-4" />
+                      Add Subject
+                    </Button>
+                    <Button type="submit" disabled={isLoading}>
+                      {isLoading ? (
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      ) : <Save className="mr-2 h-4 w-4" />}
+                      Save Changes
+                    </Button>
+                  </div>
+                  <FormMessage>{form.formState.errors.subjects?.message}</FormMessage>
+                </form>
+              </Form>
+            </CardContent>
+          </Card>
+        </div>
+        <div className="lg:col-span-1">
+            <Card>
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                        <Sparkles className="text-primary h-6 w-6" />
+                        AI Summary
+                    </CardTitle>
+                    <CardDescription>
+                        A quick overview of your academic performance based on your marks.
+                    </CardDescription>
+                </CardHeader>
+                <CardContent>
+                    {isSummaryLoading && (
+                        <div className="space-y-2">
+                            <Skeleton className="h-4 w-full" />
+                            <Skeleton className="h-4 w-full" />
+                            <Skeleton className="h-4 w-3/4" />
+                        </div>
+                    )}
+                    {summary && !isSummaryLoading && (
+                        <p className="text-sm text-muted-foreground">{summary}</p>
+                    )}
+                    {!summary && !isSummaryLoading && (
+                        <p className="text-sm text-center text-muted-foreground py-8">Save your profile to generate a summary.</p>
+                    )}
+                </CardContent>
+            </Card>
+        </div>
+    </div>
   );
 }

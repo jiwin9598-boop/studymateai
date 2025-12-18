@@ -17,6 +17,10 @@ import {
     generateTimetable,
     type GenerateTimetableInput,
 } from '@/ai/flows/generate-timetable';
+import {
+    generateProfileSummary,
+    type GenerateProfileSummaryInput,
+} from '@/ai/flows/generate-profile-summary';
 
 export async function createStudyPlanAction(
   input: GeneratePersonalizedStudyPlanInput
@@ -59,5 +63,15 @@ export async function createTimetableAction(input: GenerateTimetableInput) {
     } catch (error) {
       console.error(error);
       return { success: false, error: 'Failed to generate timetable.' };
+    }
+}
+
+export async function createProfileSummaryAction(input: GenerateProfileSummaryInput) {
+    try {
+        const result = await generateProfileSummary(input);
+        return { success: true, data: result };
+    } catch (error) {
+        console.error(error);
+        return { success: false, error: 'Failed to generate summary.' };
     }
 }
