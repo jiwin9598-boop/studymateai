@@ -1,7 +1,7 @@
+
 import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
-import { AppShell } from '@/components/layout/app-shell';
 
 export const metadata: Metadata = {
   title: 'StudyMate AI',
@@ -25,7 +25,7 @@ export default function RootLayout({
         />
       </head>
       <body className="font-body antialiased">
-        <AppShell>{children}</AppShell>
+        {children}
         <Toaster />
       </body>
     </html>
