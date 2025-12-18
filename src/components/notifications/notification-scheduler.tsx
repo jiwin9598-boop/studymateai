@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useEffect } from 'react';
@@ -57,10 +56,12 @@ export function NotificationScheduler() {
           
           if (timeUntilNotification > 0) {
             const timeoutId = setTimeout(() => {
-              new Notification('Study Session Starting!', {
-                body: `It's time to study ${subject}.`,
-                icon: '/logo.svg', // Optional: you can add an icon
-              });
+              if ('Notification' in window && Notification.permission === 'granted') {
+                new Notification('Study Session Starting!', {
+                  body: `It's time to study ${subject}.`,
+                  icon: '/logo.svg', // Optional: you can add an icon
+                });
+              }
             }, timeUntilNotification);
             newScheduledIds.push(timeoutId as unknown as number);
           }
