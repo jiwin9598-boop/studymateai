@@ -8,7 +8,7 @@ export function NotificationScheduler() {
   const { toast } = useToast();
 
   const scheduleNotifications = () => {
-    if (typeof window === 'undefined' || Notification.permission !== 'granted') {
+    if (typeof window === 'undefined' || !('Notification' in window) || Notification.permission !== 'granted') {
       return;
     }
 
@@ -80,11 +80,15 @@ export function NotificationScheduler() {
   };
 
   useEffect(() => {
-    scheduleNotifications(); // Schedule on initial load
-    window.addEventListener('timetable-updated', scheduleNotifications);
+    if (typeof window !== 'undefined' && 'Notification' in window) {
+      scheduleNotifications(); // Schedule on initial load
+      window.addEventListener('timetable-updated', scheduleNotifications);
+    }
 
     return () => {
-      window.removeEventListener('timetable-updated', scheduleNotifications);
+      if (typeof window !== 'undefined' && 'Notification' in window) {
+        window.removeEventListener('timetable-updated', scheduleNotifications);
+      }
     };
   }, []);
 
