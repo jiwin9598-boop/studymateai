@@ -100,6 +100,7 @@ export default function Home() {
       <footer className="py-6 border-t">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center text-muted-foreground">
           <p>&copy; {new Date().getFullYear()} AILAC. All rights reserved.</p>
+          <p className="text-xs mt-2">Designed by Jiwin</p>
         </div>
       </footer>
     </div>

@@ -125,6 +125,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <NotificationScheduler />
           {children}
         </main>
+        <footer className="py-4 px-6 border-t text-center text-xs text-muted-foreground">
+            <p>Designed by Jiwin</p>
+        </footer>
       </SidebarInset>
     </SidebarProvider>
   );
